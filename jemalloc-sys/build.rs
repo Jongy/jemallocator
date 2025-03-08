@@ -242,6 +242,9 @@ fn main() {
     if let Ok(lg_page) = read_and_watch_env("JEMALLOC_SYS_WITH_LG_PAGE") {
         info!("--with-lg-page={}", lg_page);
         cmd.arg(format!("--with-lg-page={lg_page}"));
+    } else if env::var("CARGO_CFG_TARGET_ARCH").unwrap() == "aarch64" {
+        // Force 64kb page size on aarch64
+        cmd.arg("--with-lg-page=16");
     }
 
     if let Ok(lg_hugepage) = read_and_watch_env("JEMALLOC_SYS_WITH_LG_HUGEPAGE") {
